@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Chair : MonoBehaviour
 {
+    public GameObject tableObj;
     public bool IsOccupied { get; private set; }
 
     public void Occupy()
