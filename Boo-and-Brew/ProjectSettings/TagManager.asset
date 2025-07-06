@@ -46,3 +46,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: MySprites
+    uniqueID: 3401622243
+    locked: 0
+  - name: MyLighting
+    uniqueID: 1109146513
+    locked: 0
