@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Ghost : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        
+        GhostLightManager.RegisterGhost(this);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        GhostLightManager.UnregisterGhost(this);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player") || collision.CompareTag("Kettle"))
+        {
+            //poof vfx
+            Destroy(gameObject);
+        }
     }
 }

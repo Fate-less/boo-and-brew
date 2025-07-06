@@ -6,13 +6,18 @@ using UnityEngine.UIElements;
 
 public class SoultipsManager : MonoBehaviour
 {
+    public static SoultipsManager instance;
     public int currentSoultips;
     public TextMeshProUGUI soultipsTMP;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Update()
     {
-        currentSoultips += (int) Time.deltaTime;
-        soultipsTMP.text = "Soultips: " + currentSoultips.ToString();
+        soultipsTMP.text = "x" + currentSoultips.ToString();
     }
 
     public void ChangeSoultipsValue(int soultips)

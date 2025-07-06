@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class SpiritManager : MonoBehaviour
 {
+    public static SpiritManager instance;
+
     [Header("Spirit Settings")]
     [SerializeField] private List<Spirit> spiritTypes;
     [SerializeField] private List<SpiritSpawnPoint> spawnPoints;
@@ -11,10 +13,35 @@ public class SpiritManager : MonoBehaviour
 
     [Header("Spawn Timing")]
     [SerializeField] private float spawnInterval = 5f;
+    private bool isRunning = false;
 
     private void Start()
     {
-        InvokeRepeating(nameof(SpawnSpiritIfPossible), 2f, spawnInterval);
+        instance = this;
+        StartCoroutine(SpawnRoutine());
+    }
+
+    private IEnumerator SpawnRoutine()
+    {
+        isRunning = true;
+        yield return new WaitForSeconds(2f);
+
+        while (isRunning)
+        {
+            SpawnSpiritIfPossible();
+
+            float timer = 0f;
+            while (timer < spawnInterval)
+            {
+                timer += Time.deltaTime;
+                yield return null;
+            }
+        }
+    }
+
+    public void SetSpawnInterval(float newInterval)
+    {
+        spawnInterval = newInterval;
     }
 
     private void SpawnSpiritIfPossible()

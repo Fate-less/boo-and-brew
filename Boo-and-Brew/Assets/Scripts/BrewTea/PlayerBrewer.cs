@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerBrewer : Player
 {
     [SerializeField] private Transform handPosition;
+    [SerializeField] private int teaPrice;
 
     private GameObject carriedTea;
 
@@ -42,6 +43,7 @@ public class PlayerBrewer : Player
             Destroy(collision.transform.GetChild(0).gameObject);
             carriedTea = null;
             chair.Vacate();
+            SoultipsManager.instance.currentSoultips += teaPrice;
             //berhasil serving teh
         }
     }
