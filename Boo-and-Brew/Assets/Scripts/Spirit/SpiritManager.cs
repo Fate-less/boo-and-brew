@@ -7,7 +7,7 @@ public class SpiritManager : MonoBehaviour
     [Header("Spirit Settings")]
     [SerializeField] private List<Spirit> spiritTypes;
     [SerializeField] private List<SpiritSpawnPoint> spawnPoints;
-    [SerializeField] private List<Chair> tables;
+    [SerializeField] private List<Chair> chairs;
 
     [Header("Spawn Timing")]
     [SerializeField] private float spawnInterval = 5f;
@@ -19,7 +19,7 @@ public class SpiritManager : MonoBehaviour
 
     private void SpawnSpiritIfPossible()
     {
-        Chair emptyTable = GetAvailableTable();
+        Chair emptyTable = GetAvailableChairs();
         if (emptyTable == null) return;
 
         Spirit spiritData = GetRandomSpirit();
@@ -28,16 +28,21 @@ public class SpiritManager : MonoBehaviour
         GameObject spiritObj = Instantiate(spiritData.prefab, spawnPosition, Quaternion.identity);
         SpiritController controller = spiritObj.GetComponent<SpiritController>();
         controller.MoveToTable(emptyTable);
+        controller.transform.SetParent(emptyTable.transform);
     }
 
-    private Chair GetAvailableTable()
+    private Chair GetAvailableChairs()
     {
-        foreach (var table in tables)
+        List<Chair> availableChairs = new List<Chair>();
+
+        foreach (var chair in chairs)
         {
-            if (!table.IsOccupied)
-                return table;
+            if (!chair.IsOccupied)
+                availableChairs.Add(chair);
         }
-        return null;
+        if (availableChairs.Count == 0)
+            return null;
+        return availableChairs[Random.Range(0, availableChairs.Count)];
     }
 
     private Spirit GetRandomSpirit()

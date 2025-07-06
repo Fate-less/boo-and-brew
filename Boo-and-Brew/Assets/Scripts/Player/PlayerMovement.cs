@@ -10,17 +10,30 @@ public class PlayerMovement : MonoBehaviour
     public float deceleration = 15f;
 
     private Rigidbody2D rb;
+    private Animator anim;
+    private SpriteRenderer spriteRenderer;
     private Vector2 moveInput;
     private Vector2 currentVelocity;
+    private float lastDirectionX = 1f;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        bool isMoving = moveInput.magnitude > 0.1f;
+        anim.SetBool("isMoving", isMoving);
+
+        if (Mathf.Abs(moveInput.x) > 0.01f)
+        {
+            lastDirectionX = moveInput.x;
+            spriteRenderer.flipX = lastDirectionX < 0;
+        }
     }
 
     void FixedUpdate()

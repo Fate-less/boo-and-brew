@@ -32,11 +32,16 @@ public class PlayerBrewer : Player
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Ghost") && IsCarryingTea())
+        if(collision.CompareTag("Chair") && IsCarryingTea())
         {
+            Chair chair = collision.GetComponent<Chair>();
+            if (!chair.IsOccupied) 
+                return;
+            
             Destroy(carriedTea);
-            Destroy(collision.gameObject);
+            Destroy(collision.transform.GetChild(0).gameObject);
             carriedTea = null;
+            chair.Vacate();
             //berhasil serving teh
         }
     }
