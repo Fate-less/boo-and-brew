@@ -44,6 +44,11 @@ public class SpiritManager : MonoBehaviour
         spawnInterval = newInterval;
     }
 
+    public float GetSpawnInterval()
+    {
+        return spawnInterval;
+    }
+
     private void SpawnSpiritIfPossible()
     {
         Chair emptyTable = GetAvailableChairs();

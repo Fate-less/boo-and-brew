@@ -5,8 +5,14 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
-    public TextMeshProUGUI timerTMP;
+    [Header("Duration")]
     public float totalDuration = 300f;
+    [Header("References")]
+    public TextMeshProUGUI timerTMP;
+    public PlayerBrewer playerBrewer;
+    public TextMeshProUGUI spiritServedTMP;
+    public TextMeshProUGUI personalBestTMP;
+    public GameObject endGameObject;
 
     private float elapsedTime = 0f;
     private bool hasEnded = false;
@@ -34,6 +40,14 @@ public class Timer : MonoBehaviour
     private void GameEnd()
     {
         Debug.Log("Game has ended!");
-        // Your custom logic here (e.g., trigger win, change scene, etc.)
+        int personalBest = PlayerPrefs.GetInt("personalBest", 0);
+        if(playerBrewer.servedSpirit > personalBest)
+        {
+            PlayerPrefs.SetInt("personalBest", playerBrewer.servedSpirit);
+            personalBest = playerBrewer.servedSpirit;
+        }
+        spiritServedTMP.text = "Spirit served: " + playerBrewer.servedSpirit.ToString();
+        personalBestTMP.text = "Personal best: " + personalBest.ToString();
+        endGameObject.SetActive(true);
     }
 }
