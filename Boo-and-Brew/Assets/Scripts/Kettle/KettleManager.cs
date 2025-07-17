@@ -8,7 +8,18 @@ public class KettleManager : MonoBehaviour
     public GameObject kettlePrefab;
     public Transform spawnPoint;
 
-    private List<GameObject> activeKettles = new List<GameObject>();
+    private List<Kettle> activeKettles = new List<Kettle>();
+    private HashSet<Ghost> targetedGhosts = new HashSet<Ghost>();
+
+    public static KettleManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     public void SpawnKettle()
     {
@@ -18,12 +29,44 @@ public class KettleManager : MonoBehaviour
             return;
         }
 
-        GameObject kettle = Instantiate(kettlePrefab, spawnPoint.position, Quaternion.identity);
-        activeKettles.Add(kettle);
+        GameObject kettleGO = Instantiate(kettlePrefab, spawnPoint.position, Quaternion.identity);
+        Kettle kettle = kettleGO.GetComponent<Kettle>();
+        if (kettle != null)
+        {
+            activeKettles.Add(kettle);
+            AssignTarget(kettle);
+        }
     }
 
-    public List<GameObject> GetActiveKettles()
+    public void AssignTarget(Kettle kettle)
     {
-        return activeKettles;
+        if (kettle.CurrentTarget != null)
+            targetedGhosts.Remove(kettle.CurrentTarget.GetComponent<Ghost>());
+
+        Ghost[] ghosts = FindObjectsOfType<Ghost>();
+        foreach (Ghost ghost in ghosts)
+        {
+            if (!targetedGhosts.Contains(ghost))
+            {
+                targetedGhosts.Add(ghost);
+                kettle.SetTarget(ghost.transform);
+                return;
+            }
+        }
+
+        kettle.SetTarget(null);
+    }
+
+    public void NotifyGhostGone(Ghost ghost)
+    {
+        targetedGhosts.Remove(ghost);
+
+        foreach (var kettle in activeKettles)
+        {
+            if (kettle.CurrentTarget == null)
+            {
+                AssignTarget(kettle);
+            }
+        }
     }
 }

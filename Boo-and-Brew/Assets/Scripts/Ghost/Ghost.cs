@@ -12,13 +12,17 @@ public class Ghost : MonoBehaviour
     private void OnDisable()
     {
         GhostLightManager.UnregisterGhost(this);
+        if (KettleManager.Instance != null)
+        {
+            KettleManager.Instance.NotifyGhostGone(this);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.CompareTag("Player") || collision.CompareTag("Kettle"))
         {
-            //poof vfx
+            AudioSource.PlayClipAtPoint(AudioManager.instance.ghostPoof, transform.position);
             Destroy(gameObject);
         }
     }

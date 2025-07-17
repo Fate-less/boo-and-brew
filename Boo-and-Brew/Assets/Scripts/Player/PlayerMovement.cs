@@ -9,9 +9,14 @@ public class PlayerMovement : MonoBehaviour
     public float acceleration = 10f;
     public float deceleration = 15f;
 
+    [Header("Audio Settings")]
+    public AudioClip walkSFX;
+    public float walkSFXVolume = 0.5f;
+
     private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
     private Vector2 moveInput;
     private Vector2 currentVelocity;
     private float lastDirectionX = 1f;
@@ -21,6 +26,11 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = walkSFX;
+        audioSource.loop = true;
+        audioSource.volume = walkSFXVolume;
+        audioSource.playOnAwake = false;
     }
 
     void Update()
@@ -33,6 +43,21 @@ public class PlayerMovement : MonoBehaviour
         {
             lastDirectionX = moveInput.x;
             spriteRenderer.flipX = lastDirectionX < 0;
+        }
+
+        if (isMoving)
+        {
+            if (!audioSource.isPlaying)
+                audioSource.Play();
+
+            audioSource.pitch = Mathf.Lerp(1f, 1.5f, moveInput.magnitude);
+        }
+        else
+        {
+            if (audioSource.isPlaying)
+                audioSource.Stop();
+
+            audioSource.pitch = 1f;
         }
     }
 

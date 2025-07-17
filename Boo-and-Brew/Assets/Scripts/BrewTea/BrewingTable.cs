@@ -53,6 +53,7 @@ public class BrewingTable : MonoBehaviour
         popupUI.SetActive(false);
         brewProgressSlider.gameObject.SetActive(true);
         brewProgressSlider.fillAmount = 0f;
+        AudioSource.PlayClipAtPoint(AudioManager.instance.playerBrewing, transform.position);
 
         float elapsed = 0f;
         while (elapsed < brewTime)

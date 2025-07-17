@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager instance;
     public AudioClip customerDissapoint;
     public AudioClip customerHappy;
     public AudioClip ghostAway;
@@ -12,5 +13,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip ghostPoof;
     public AudioClip ghostSkill;
     public AudioClip playerBrewing;
-    public AudioClip playerFootstep;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 }

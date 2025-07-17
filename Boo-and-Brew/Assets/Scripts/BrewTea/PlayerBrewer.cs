@@ -10,6 +10,7 @@ public class PlayerBrewer : Player
     private GameObject carriedTea;
 
     public bool IsCarryingTea() => carriedTea != null;
+    public int servedSpirit = 0;
 
     public void PickUpTea(GameObject tea)
     {
@@ -44,7 +45,8 @@ public class PlayerBrewer : Player
             carriedTea = null;
             chair.Vacate();
             SoultipsManager.instance.currentSoultips += teaPrice;
-            //berhasil serving teh
+            servedSpirit++;
+            AudioSource.PlayClipAtPoint(AudioManager.instance.customerHappy, transform.position);
         }
     }
 

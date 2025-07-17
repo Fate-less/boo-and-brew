@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GhostSpawner : MonoBehaviour
@@ -34,6 +33,7 @@ public class GhostSpawner : MonoBehaviour
         Transform randomPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
         GameObject newGhost = Instantiate(ghostPrefab, randomPoint.position, Quaternion.identity);
         spawnedGhosts.Add(newGhost);
+        AudioSource.PlayClipAtPoint(AudioManager.instance.ghostAway, newGhost.transform.position);
 
         CleanupDestroyedGhosts();
     }

@@ -27,7 +27,7 @@ public class KettleSkill : MonoBehaviour
             kettleImage.color = new Color(kettleImage.color.r, kettleImage.color.g, kettleImage.color.b, 100f);
         else
             kettleImage.color = new Color(kettleImage.color.r, kettleImage.color.g, kettleImage.color.b, 255f);
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             BuyKettle();
         }
@@ -41,5 +41,6 @@ public class KettleSkill : MonoBehaviour
         }
         kettleManager.SpawnKettle();
         soultipsManager.ChangeSoultipsValue(kettlePrice * -1);
+        AudioSource.PlayClipAtPoint(AudioManager.instance.ghostSkill, transform.position);
     }
 }
